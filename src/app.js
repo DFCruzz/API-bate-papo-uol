@@ -200,7 +200,7 @@ setInterval(
 
         try {
             isUserActive.filter(async (e) => {
-                if (Date.now() - 10000 > e.lastStatus) {
+                if (e.lastStatus < (Date.now() - 10000)) {
                     await database.collection("participants").deleteOne({ name: e.name })
                     const exitMessage = {
                         from: e.name,
