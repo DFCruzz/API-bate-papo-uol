@@ -161,7 +161,7 @@ app.get("/messages", async (req, res) => {
         }
 
         else {
-            return res.send(messages)
+            return res.send(messages.reverse())
         }
     }
 
@@ -171,7 +171,7 @@ app.get("/messages", async (req, res) => {
 })
 
 app.post("/status", async (req, res) => {
-    const user = req.headers.user
+    const { user } = req.headers
 
     try {
         const isUserOnline = await database.collection("participants").findOne({ name: user })
@@ -180,7 +180,7 @@ app.post("/status", async (req, res) => {
             return res.sendStatus(404)
         }
 
-        database.collection("participants").updateOne({ name: user, lastStatus: Date.now() })
+        database.collection("participants").updateOne({ name: user }, { $set: { lastStatus: Date.now() } })
 
         res.sendStatus(200)
     }
@@ -197,7 +197,7 @@ setInterval(
 
         try {
             isUserActive.filter(async (e) => {
-                if (Date.now() - 10000 >= e.lastStatus) {
+                if (Date.now() - 10000 > e.lastStatus) {
                     await database.collection("participants").deleteOne({ name: e.name })
                     const exitMessage = {
                         from: e.name,
