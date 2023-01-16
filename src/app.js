@@ -180,7 +180,10 @@ app.post("/status", async (req, res) => {
             return res.sendStatus(404)
         }
 
-        database.collection("participants").updateOne({ name: user }, { $set: { lastStatus: Date.now() } })
+        await database.collection("participants").updateOne(
+            { name: user },
+            { $set: { lastStatus: Date.now() }
+         })
 
         res.sendStatus(200)
     }
