@@ -100,7 +100,7 @@ app.post("/messages", async (req, res) => {
         return res.status(422).send(errors)
     }
 
-    const isUserLogged = await database.collection("messages").findOne({ name: user })
+    const isUserLogged = await database.collection("participants").findOne({ name: user })
 
         if (!isUserLogged) {
             return res.status(422).send("Usuário desconectado!")
@@ -161,7 +161,7 @@ app.get("/messages", async (req, res) => {
         }
 
         else {
-            return res.send(messages.reverse())
+            return res.send(messages)
         }
     }
 
